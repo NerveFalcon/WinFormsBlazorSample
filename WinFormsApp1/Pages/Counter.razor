@@ -1,0 +1,40 @@
+<h1>Counter</h1>
+
+<p>Current count: @_currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="ShowMessageBox">Show message box</button>
+<button class="btn btn-primary" @onclick="SelectFile">Select file</button>
+
+@if (!string.IsNullOrWhiteSpace(_selectedFile))
+{
+	<p>Selected file: @_selectedFile</p>
+	<p>First row in file: @_fileText</p>
+}
+
+@code {
+	private int _currentCount = 0;
+	private string? _selectedFile;
+	private string? _fileText;
+
+	private void IncrementCount() => _currentCount++;
+	private void ShowMessageBox() => MessageBox.Show("Test");
+
+	private Task SelectFile()
+	{
+		using var filePicker = new OpenFileDialog();
+		filePicker.CheckFileExists = true;
+		filePicker.Filter = "Text files (*.txt)|*.txt";
+
+		if (filePicker.ShowDialog() == DialogResult.OK)
+		{
+			_selectedFile = filePicker.SafeFileName;
+			_fileText = File.ReadLines(filePicker.FileName).FirstOrDefault() ?? "Empty file";
+		}
+		else
+			_selectedFile = null;
+
+		return Task.CompletedTask;
+	}
+
+}
