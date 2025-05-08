@@ -8,12 +8,7 @@ static class Program
 	[STAThread]
 	static void Main()
 	{
-		var cts = new CancellationTokenSource();
-		var args = Environment.GetCommandLineArgs();
-
 		ApplicationConfiguration.Initialize();
 		Application.Run(new Form1());
-		
-		cts.Cancel();
 	}
 }
